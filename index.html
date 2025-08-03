@@ -4,59 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Intimo Delights!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #F3F3FE;
-            background-image: url('https://files.jotform.com/jufs/jeancarlozelaya/form_files/Portadas%20de%20Facebook%20(1).6709c7d7b90d37.45625885.png?md5=Sgtt6BQ8iN0dpbsqdiwjsQ&expires=1738546153');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background-color: #f1dedc;
         }
         .logo {
             display: block;
-            margin: 20px auto;
-            width: 100px; /* Ajusta el tamaño del logo */
+            margin: 30px auto 20px;
+            width: 150px;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .search-container input {
+            width: 90%;
+            max-width: 500px;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 1px solid #DEE2E6;
+            border-radius: 25px;
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .search-container input:focus {
+            border-color: #e91e63;
+            box-shadow: 0 2px 8px rgba(233, 30, 99, 0.2);
         }
         .product-container {
-            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
         }
         .product-card {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            background-color: rgba(255, 255, 255, 0.9);
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            cursor: pointer; /* Cambia el cursor al pasar sobre el artículo */
+            background-color: #FFFFFF;
+            border: 1px solid #DEE2E6;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            width: calc(50% - 10px);
+            position: relative;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
         .product-card img {
-            width: 80px;
-            height: 80px;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
             border-radius: 8px;
-            margin-right: 10px;
+            margin-bottom: 15px;
         }
         .product-card .details {
-            flex: 1;
+            width: 100%;
         }
         .product-card h3 {
-            font-size: 14px;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
             margin: 0 0 5px;
-            color: #333;
+            color: #343A40;
         }
         .product-card p {
-            font-size: 12px;
-            color: #555;
-            margin: 0 0 5px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #6C757D;
+            margin: 0;
+            height: 4.5em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
         }
         .product-card .price {
-            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
             color: #e91e63;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+        .product-card .stock-label {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #28a745;
+            color: #fff;
             font-weight: bold;
+            font-size: 12px;
+            padding: 5px 8px;
+            border-radius: 5px;
+            z-index: 10;
         }
         .modal {
             display: none;
@@ -95,430 +152,362 @@
             margin-top: 10px;
         }
         .thumbnails img {
-            width: 50px;
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
             margin: 5px;
             cursor: pointer;
             border-radius: 5px;
             border: 2px solid transparent;
+            transition: border-color 0.3s ease;
         }
-        .thumbnails img.active {
+        .thumbnails img:hover, .thumbnails img.active {
             border-color: #e91e63;
         }
     </style>
 </head>
 <body>
 
-    <!-- Logo de la tienda -->
     <img src="https://files.jotform.com/jufs/jeancarlozelaya/form_files/Intimo%20Delights!%20(Sin%20Fondo).6709c792684de5.91296802.png?md5=0fUZptNrCU6RBNmBjRJnOQ&expires=1738546878" alt="Logo Tienda" class="logo">
 
-    <div class="product-container">
-        <!-- Producto 1 -->
-        <div class="product-card" onclick="openModal('product1')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/04/7d/17254572424b636c2f1b4e370ed5401fa37ef82b84.webp">
-            <div class="details">
-                <h3>Lubricante Frutal de Fresa - Suavidad y Placer</h3>
-                <p>Este lubricante a base de agua con sabor a fresa proporciona una experiencia suave y sedosa, perfecta para parejas y uso con juguetes. Con 200 ml (6.8 oz) de placer, es ideal para añadir un toque frutal a tus momentos íntimos.</p>
-                <p class="price">Lps. 400.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 2 -->
-        <div class="product-card" onclick="openModal('product2')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/27/1687880142e2950754f103e0d2af5204533d7f157f_thumbnail_750x999.webp">
-            <div class="details">
-                <h3>Enema - Ducha Íntima para Limpieza Profunda</h3>
-                <p>Diseñado para una limpieza anal efectiva y cómoda. Ideal para quienes buscan una experiencia fresca y segura antes de la intimidad. Su capacidad de 160ml garantiza una limpieza profunda y eficiente en cada uso.</p>
-                <p class="price">Lps. 230.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 3 -->
-        <div class="product-card" onclick="openModal('product3')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/27/b4/1727406835aedfe040373e8b24ccc15acb321cbb8a_square.webp">
-            <div class="details">
-                <h3>Estimulador Anal Inalámbrico con Control Remoto</h3>
-                <p>Con 10 velocidades de vibración y diseño silencioso, es ideal para la estimulación anal. Compacto y portátil, es un compañero discreto para explorar y disfrutar de momentos íntimos llenos de emoción.</p>
-                <p class="price">Lps. 380.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 4 -->
-        <div class="product-card" onclick="openModal('product4')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/11/17/7a/1700189317ec49a02f7c6d02634c2ab6e54cd48431.webp">
-            <div class="details">
-                <h3>Masturbador Masculino Portátil</h3>
-                <p>Su diseño portátil y ligero (4.92 pulgadas) lo convierte en el compañero perfecto. Fabricado con materiales seguros, asegura una experiencia cómoda y satisfactoria.</p>
-                <p class="price">Lps. 700.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 5 -->
-        <div class="product-card" onclick="openModal('product5')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/13/168662838368c912f7560d52128a892eb088dcbd1f.webp">
-            <div class="details">
-                <h3>Huevo Vibrador Inalámbrico</h3>
-                <p>Este vibrador saltarín inalámbrico ofrece una experiencia emocionante con control remoto, su diseño compacto y versátil lo convierte en un juguete ideal para explorar nuevas sensaciones juntos.</p>
-                <p class="price">Lps. 410.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 6 -->
-        <div class="product-card" onclick="openModal('product6')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/13/b2/17261983465ce15cc7dc82c6598ba4c99241fc149f.webp">
-            <div class="details">
-                <h3>Magic Wand - Estimulador Potente y Compacto</h3>
-                <p>Su diseño compacto lo hace conveniente para llevar, convirtiéndolo en un masajeador ideal para el punto G y un excelente compañero en tus momentos de placer.</p>
-                <p class="price">Lps. 410.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 7 -->
-        <div class="product-card" onclick="openModal('product7')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/07/31/77/172238907867e69d485a573c5746557ea100342930.webp">
-            <div class="details">
-                <h3>Estimulador Vaginal de 10 Velocidades</h3>
-                <p>Este vibrador mariposa de diseño floral ofrece 10 velocidades para una estimulación personalizada del clítoris y un masaje vaginal placentero. Hecho de silicona suave.</p>
-                <p class="price">Lps. 700.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 8 -->
-        <div class="product-card" onclick="openModal('product8')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/11/04/11/173071253592e92528d29e7b15e00812dc8e75f775.webp">
-            <div class="details">
-                <h3>Dildo Realista de 8.7"</h3>
-                <p>Con un impresionante tamaño de 8.7 pulgadas y un grosor que garantiza una sensación realista, este dildo de silicona suave, flexible y su base con ventosa permite fijarlo en cualquier superficie, liberando tus manos para un placer sin límites.</p>
-                <p class="price">Lps. 900.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 9 -->
-        <div class="product-card" onclick="openModal('product9')">
-            <img src="https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/1f64783a-de40-4c33-86a7-1ab6d2898378.jpg">
-            <div class="details">
-                <h3>Varita Vibradora Potente</h3>
-                <p>Diseñada para estimular el clítoris, el punto G y la zona vaginal. Con 10 modos de vibración, te ofrece desde suaves caricias hasta intensas pulsaciones para satisfacer todas tus fantasías.</p>
-                <p class="price">Lps. 990.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 10 -->
-        <div class="product-card" onclick="openModal('product10')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/10/15/64/1728957434b31591409de0da34df4d0904618b6240.webp">
-            <div class="details">
-                <h3>Vibrador con Embestida Realista y Ultra Placer</h3>
-                <p>Diseñado para imitar un movimiento real de penetración con potentes vibraciones que estimulan el clítoris y el punto G al máximo. Su tecnología de oscilación y empuje profundo ofrece sensaciones más intensas y placenteras.</p>
-                <p class="price">Lps. 990.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 11 -->
-        <div class="product-card" onclick="openModal('product11')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/07/16/2b/172111981652c99b4cfa2db1ceb3be943b2527ede4.webp">
-            <div class="details">
-                <h3>Estimulador de Clitoris y Dilatador Anal</h3>
-                <p>Este vibrador realista ofrece una experiencia doble con su modo vibratorio para estimular el clítoris y el punto G, además de funcionar como dilatador anal. Con 9 modos de vibración y un diseño portátil.</p>
-                <p class="price">Lps. 690.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 12 -->
-        <div class="product-card" onclick="openModal('product12')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/03/07/91/17097866539ac0cb3a2666fa9fe30ae032e9acdcc8.webp">
-            <div class="details">
-                <h3>Secret Bliss – Mini Vibrador Discreto y Potente</h3>
-                <p>Pequeño, elegante y extremadamente placentero. Es un mini vibrador con diseño de lápiz labial rojo, perfecto para la discreción y el placer en cualquier momento.</p>
-                <p class="price">Lps. 300.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 13 -->
-        <div class="product-card" onclick="openModal('product13')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/11/04/b6/173070517283d7e82d2dfc95f441b62cb9ab249efb.webp">
-            <div class="details">
-                <h3>Mini Bala VibraX – Placer Preciso y Discreto</h3>
-                <p>Pequeña pero poderosa, la Mini Bala VibraX es el estimulador perfecto para intensos momentos de placer. Su diseño compacto y vibración potente permiten una estimulación precisa del clítoris y la zona vaginal.</p>
-                <p class="price">Lps. 300.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 14 -->
-        <div class="product-card" onclick="openModal('product14')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/24/16901688526a2bb0a1d206b71f70282d6615018835_square.webp">
-            <div class="details">
-                <h3>Dark Desire – Kit BDSM de 11 Piezas para Ataduras y Placer Extremo</h3>
-                <p>Lleva tus juegos de dominación y sumisión al siguiente nivel, un kit BDSM completo de 11 piezas diseñado para explorar tus fantasías más intensas.</p>
-                <p class="price">Lps. 700.00</p>
-            </div>
-        </div>
-
-        <!-- Producto 15 -->
-        <div class="product-card" onclick="openModal('product15')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/16/0b/1726434367fba10fab4a53abb1bc68fad2bb0c7138_square.webp">
-            <div class="details">
-                <h3>Bolsa de Almacenamiento</h3>
-                <p>Guarda y protege tus juguetes íntimos con Discreet Safe, diseñada para mantener la discreción y la higiene. Ideal para dildos, vibradores, esposas y otros accesorios, evitando miradas indiscretas y protegiéndolos del polvo y la suciedad.</p>
-                <p class="price">Lps. 320.00</p>
-            </div>
-        </div>
-
-
-
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Buscar productos..." oninput="filterProducts()">
     </div>
 
-
-
-
-
-    <!-- Modal para Producto 1 -->
-    <div id="product1Modal" class="modal">
-        <span class="close" onclick="closeModal('product1')">&times;</span>
-        <img class="modal-content" id="img01">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/04/7d/17254572424b636c2f1b4e370ed5401fa37ef82b84.webp" onclick="changeImage(this.src, 'product1')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/04/7d/1725457242016bdf58c91be1fface7267ec7d54af1.webp" onclick="changeImage(this.src, 'product1')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/04/7d/1725457242e5cd7782e4ce473af9be70bab04c5606.gif" onclick="changeImage(this.src, 'product1')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/04/d9/1725457243c0b7dffd53eac8eb208edf093dd0549a.gif" onclick="changeImage(this.src, 'product1')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/04/bb/1725457320b71ee9d3c0c5d1678913d9aad24c216b.webp" onclick="changeImage(this.src, 'product1')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/04/7d/17254572422d227944d563cd0b60cc3dd9c78f499c.webp" onclick="changeImage(this.src, 'product1')">
-        </div>
+    <div class="product-container" id="product-container">
     </div>
 
-    <!-- Modal para Producto 2 -->
-    <div id="product2Modal" class="modal">
-        <span class="close" onclick="closeModal('product2')">&times;</span>
-        <img class="modal-content" id="img02">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/27/1687880142e2950754f103e0d2af5204533d7f157f_thumbnail_750x999.webp" onclick="changeImage(this.src, 'product2')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/27/16878801448ea96896135dd22c4ce226082c710d5d_thumbnail_750x999.webp" onclick="changeImage(this.src, 'product2')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/27/1687880145df30b0b07588bd29ddeba8dd825cff01_thumbnail_750x999.webp" onclick="changeImage(this.src, 'product2')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/27/1687880145cd3e425792bbe68ffe4287d7714688f8_thumbnail_750x999.webp" onclick="changeImage(this.src, 'product2')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/27/1687880146484cdfb2c27ff1a98d2971fe0bb4f511_thumbnail_750x999.webp" onclick="changeImage(this.src, 'product2')">
+    <div id="modal-template" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modal-image">
+        <div class="thumbnails" id="modal-thumbnails">
         </div>
     </div>
-
-    <!-- Modal para Producto 3 -->
-    <div id="product3Modal" class="modal">
-        <span class="close" onclick="closeModal('product3')">&times;</span>
-        <img class="modal-content" id="img03">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/27/b4/1727406835aedfe040373e8b24ccc15acb321cbb8a_square.webp" onclick="changeImage(this.src, 'product3')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/27/e1/17274068854112022064bb7ad30f64ba06965618ba_square.webp" onclick="changeImage(this.src, 'product3')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/10/07/6a/1728282772a3ef711e0e1e8e0beada77aa35f9914a_square.webp" onclick="changeImage(this.src, 'product3')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/27/69/1727406909086e62524032f566fe6637e1c06125b6_square.webp" onclick="changeImage(this.src, 'product3')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/27/e3/1727406919083f3b26838496bc2bb1be37aa3d5833_square.webp" onclick="changeImage(this.src, 'product3')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/27/ec/172740693033d3a777a8cc236aae55db0c66661d0f_square.webp" onclick="changeImage(this.src, 'product3')">
-        </div>
-    </div>
-
-    <!-- Modal para Producto 4 -->
-    <div id="product4Modal" class="modal">
-        <span class="close" onclick="closeModal('product4')">&times;</span>
-        <img class="modal-content" id="img04">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/11/17/7a/1700189317ec49a02f7c6d02634c2ab6e54cd48431.webp" onclick="changeImage(this.src, 'product4')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/11/17/7a/17001893176033f2236f7bbdd63bb05fd2206c3281.webp" onclick="changeImage(this.src, 'product4')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/11/17/7a/1700189317db7ece359d415ea793ba4bc245c1d47a.webp" onclick="changeImage(this.src, 'product4')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/11/17/8c/1700189328d297cc91e9f89433c74a549fb503ed5d.webp" onclick="changeImage(this.src, 'product4')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/11/17/7a/1700189317a5a3e576af9c8297abbc894863702f17.webp" onclick="changeImage(this.src, 'product4')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/11/17/7a/1700189317678dae4888f2a539b576576ab0177f7e.webp" onclick="changeImage(this.src, 'product4')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/11/17/8c/17001893285dfb366fdbb1fba90a731accd061ee02.webp" onclick="changeImage(this.src, 'product4')">
-
-        </div>
-    </div>
-
-    <!-- Modal para Producto 5 -->
-    <div id="product5Modal" class="modal">
-        <span class="close" onclick="closeModal('product5')">&times;</span>
-        <img class="modal-content" id="img05">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/13/168662838368c912f7560d52128a892eb088dcbd1f.webp" onclick="changeImage(this.src, 'product5')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/13/16866283714dc205a092d38004e458110962ab3fb0.webp" onclick="changeImage(this.src, 'product5')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/13/1686628360b3ec05efa27ea5b717fbadfbf23418f2.webp" onclick="changeImage(this.src, 'product5')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/13/1686628359c5aca1b374d3a30c57e6f6a48bdf76d1.webp" onclick="changeImage(this.src, 'product5')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/13/1686628359c4ece4f99cfcdd179985b671ae999064.webp" onclick="changeImage(this.src, 'product5')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/13/1686628359c4122eec7879ef14c8483ecfb9332636.webp" onclick="changeImage(this.src, 'product5')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/13/16866283601b47bb6320feeedf93b0693d67e197ff.webp" onclick="changeImage(this.src, 'product5')">
-        </div>
-    </div>
-
-    <!-- Modal para Producto 6 -->
-    <div id="product6Modal" class="modal">
-        <span class="close" onclick="closeModal('product6')">&times;</span>
-        <img class="modal-content" id="img06">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/13/b2/17261983465ce15cc7dc82c6598ba4c99241fc149f.webp" onclick="changeImage(this.src, 'product6')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/13/46/1726198266707c10a1fb3b728bc1b13bd77889ca42.gif" onclick="changeImage(this.src, 'product6')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/13/46/1726198266fa358eb6037a697504b621e2e0fc8244.gif" onclick="changeImage(this.src, 'product6')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/13/50/1726198267b0a2dbdbedb085cb8aea8ae674f7bd8a.gif" onclick="changeImage(this.src, 'product6')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/13/46/172619826602b13a3460b01d5e7bc2fc6332e1724a.gif" onclick="changeImage(this.src, 'product6')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/13/8a/17261982863cbd29926e9a138f21738cc91cbe71ec.webp" onclick="changeImage(this.src, 'product6')">
-        </div>
-    </div>
-
-    <!-- Modal para Producto 7 -->
-    <div id="product7Modal" class="modal">
-        <span class="close" onclick="closeModal('product7')">&times;</span>
-        <img class="modal-content" id="img07">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/07/31/77/172238907867e69d485a573c5746557ea100342930.webp" onclick="changeImage(this.src, 'product7')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/07/31/77/1722389078bcdc22172cf94f764f2532a1388ca308.gif" onclick="changeImage(this.src, 'product7')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/07/31/77/1722389078ce65e1fbeaeafb2fa0b3c73de2870c8c.gif" onclick="changeImage(this.src, 'product7')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/07/31/a6/1722389079bdd9c3f65f4749a29edfd220f9043caf.gif" onclick="changeImage(this.src, 'product7')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/08/22/be/1724289035af2c3b2deed8243c8f60c9c906291bbb.webp" onclick="changeImage(this.src, 'product7')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/07/31/77/1722389078b8b626065fd5ad3532d5878a8f729ac3.webp" onclick="changeImage(this.src, 'product7')">
-        </div>
-    </div>
-
-    <!-- Modal para Producto 8 -->
-    <div id="product8Modal" class="modal">
-        <span class="close" onclick="closeModal('product8')">&times;</span>
-        <img class="modal-content" id="img08">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/11/04/11/173071253592e92528d29e7b15e00812dc8e75f775.webp" onclick="changeImage(this.src, 'product8')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/01/25/4c/170615243722e9091b6871f6d644f827d636cd18e4.webp" onclick="changeImage(this.src, 'product8')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/10/29/ce/1730167002f9c6b97e3355cba953e2918caf514492.webp" onclick="changeImage(this.src, 'product8')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/10/29/ce/17301670025b8d4aa2fa5ac21f29c45f13c7f62b98.webp" onclick="changeImage(this.src, 'product8')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/01/25/4c/17061524373e9a66c310767a0795937a3623d79aee.webp" onclick="changeImage(this.src, 'product8')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/01/25/4c/170615243745a509289e3805cb847d0be3167ab43e.webp" onclick="changeImage(this.src, 'product8')">
-        </div>
-    </div>
-
-    <!-- Modal para Producto 9 -->
-    <div id="product9Modal" class="modal">
-        <span class="close" onclick="closeModal('product9')">&times;</span>
-        <img class="modal-content" id="img09">
-        <div class="thumbnails">
-            <img src="https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/1f64783a-de40-4c33-86a7-1ab6d2898378.jpg" onclick="changeImage(this.src, 'product9')" class="active">
-            <img src="https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/e5ecc26c-d7d1-46d8-913d-689d8ffbe555.jpg" onclick="changeImage(this.src, 'product9')">
-            <img src="https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/a90d8ef3-da92-4dc3-88e8-c022a1db4225.jpg" onclick="changeImage(this.src, 'product9')">
-            <img src="https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/49b8a38d-713c-4f9d-99d8-3f9cd3573328.jpg" onclick="changeImage(this.src, 'product9')">
-            <img src="https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/ef1dd05e-3afb-47b6-8e04-118c995cc8df.jpg" onclick="changeImage(this.src, 'product9')">
-            <img src="https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/d448044c-f89b-4807-b57f-1be042f5f3c0.jpg" onclick="changeImage(this.src, 'product9')">
-        </div>
-    </div>
-
-    <!-- Modal para Producto 10 -->
-    <div id="product10Modal" class="modal">
-        <span class="close" onclick="closeModal('product10')">&times;</span>
-        <img class="modal-content" id="img10">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/10/15/64/1728957434b31591409de0da34df4d0904618b6240.webp" onclick="changeImage(this.src, 'product10')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/10/09/13/1728466914c46b17eef4de853305263f1c84e35d09.gif" onclick="changeImage(this.src, 'product10')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/10/09/09/172846657012d7a06e6196656edf3be47b9c28915e.gif" onclick="changeImage(this.src, 'product10')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/10/09/d9/1728466923c730210b0df6dd513cff4874b46e8328.gif" onclick="changeImage(this.src, 'product10')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/10/09/71/1728466939c28b58d37a17063ec8de036b3d4bf932.gif" onclick="changeImage(this.src, 'product10')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/10/09/16/1728466972dc114ba415a23b8ccb691bb042fa194b.webp" onclick="changeImage(this.src, 'product10')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/10/09/00/17284669938d3bf4987710fafcd16ecef9f6d91b4d.webp" onclick="changeImage(this.src, 'product10')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/10/09/17/17284669311d49deea9e09312fecc12225a32c2d79.gif" onclick="changeImage(this.src, 'product10')">
-        </div>
-    </div>
-
-    <!-- Modal para Producto 11 -->
-    <div id="product11Modal" class="modal">
-        <span class="close" onclick="closeModal('product11')">&times;</span>
-        <img class="modal-content" id="img11">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/07/16/2b/172111981652c99b4cfa2db1ceb3be943b2527ede4.webp" onclick="changeImage(this.src, 'product11')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/06/25/9a/1719303330c9c16c6e5cd46a625e7212ebc0e5fae6.gif" onclick="changeImage(this.src, 'product11')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/06/25/cb/1719303422604e078a64779adddd3e478c554548d6.gif" onclick="changeImage(this.src, 'product11')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/06/25/b8/171930333117736632cae7e5acabce2f6a39b44fb0.webp" onclick="changeImage(this.src, 'product11')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/06/25/b8/1719303331e0fdf0ad715f30ddf74d974894c27b2e.gif" onclick="changeImage(this.src, 'product11')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/06/25/b8/1719303331314e5c9fc8f6c5afa69e5f12e9c9c835.gif" onclick="changeImage(this.src, 'product11')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/06/25/f9/17193034231cc3c31274adf90e2d95152bd83102a6.webp" onclick="changeImage(this.src, 'product11')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/06/25/cb/1719303422fdc6cec6ae406f8402247b1dca0d6bd5.webp" onclick="changeImage(this.src, 'product11')">
-        </div>
-    </div>
-
-    <!-- Modal para Producto 12 -->
-    <div id="product12Modal" class="modal">
-        <span class="close" onclick="closeModal('product12')">&times;</span>
-        <img class="modal-content" id="img12">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/03/07/91/17097866539ac0cb3a2666fa9fe30ae032e9acdcc8.webp" onclick="changeImage(this.src, 'product12')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/16/16868915191552831613193cae35f4459ed3ffd919.webp" onclick="changeImage(this.src, 'product12')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/16/16868915199b8cd0cf194bc2ec420cd6c46431f0a4.webp" onclick="changeImage(this.src, 'product12')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/16/16868915196657b7bae28cdfa5ae7709c03c58e837.webp" onclick="changeImage(this.src, 'product12')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/16/16868915191ed953ecdf350a7f58d9a4d1edea3b60.webp" onclick="changeImage(this.src, 'product12')">
-        </div>
-    </div>
-
-    <!-- Modal para Producto 13 -->
-    <div id="product13Modal" class="modal">
-        <span class="close" onclick="closeModal('product13')">&times;</span>
-        <img class="modal-content" id="img13">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/11/04/b6/173070517283d7e82d2dfc95f441b62cb9ab249efb.webp" onclick="changeImage(this.src, 'product13')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/09/05/f5/1693894738a1a578429bd1e5576b825d7ec99c38a8.webp" onclick="changeImage(this.src, 'product13')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/09/05/f5/1693894738ef545f4e711f5ae298fdbaed7a6e46c5.webp" onclick="changeImage(this.src, 'product13')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/08/16/80/17237997437f04afdf788a5d9a9c0ebd18663ca9b8.webp" onclick="changeImage(this.src, 'product13')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/09/05/f5/169389473823d23345a42d5340ae47e0f08ddcf080.webp" onclick="changeImage(this.src, 'product13')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/08/16/86/17237991426b4348a274bc22cac9c42c843b9257b4.webp" onclick="changeImage(this.src, 'product13')">
-        </div>
-    </div>
-
-    <!-- Modal para Producto 14 -->
-    <div id="product14Modal" class="modal">
-        <span class="close" onclick="closeModal('product14')">&times;</span>
-        <img class="modal-content" id="img14">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/24/16901688526a2bb0a1d206b71f70282d6615018835_square.webp" onclick="changeImage(this.src, 'product14')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/24/169016885254ac7b1136ee1d5d168282cd97db7f11_square.webp" onclick="changeImage(this.src, 'product14')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/24/16901688525737fd24fb319bf3975079998864b27c_square.webp" onclick="changeImage(this.src, 'product14')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/24/1690168852100d79c8d3f15e92c1960274e0aa98cd_square.webp" onclick="changeImage(this.src, 'product14')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/24/16901688533ec9b2891f294734fb810fcac8f2a9d2_square.webp" onclick="changeImage(this.src, 'product14')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/24/1690168852f7eb1e5116046633631359b8d0d10e93_square.webp" onclick="changeImage(this.src, 'product14')">
-        </div>
-    </div>
-
-    <!-- Modal para Producto 15 -->
-    <div id="product15Modal" class="modal">
-        <span class="close" onclick="closeModal('product15')">&times;</span>
-        <img class="modal-content" id="img15">
-        <div class="thumbnails">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/16/0b/1726434367fba10fab4a53abb1bc68fad2bb0c7138_square.webp" onclick="changeImage(this.src, 'product15')" class="active">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/07/13/78/1720869524c18f0c9a6c1e8d77081a0df28a092528_square.webp" onclick="changeImage(this.src, 'product15')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/08/22/4a/172425758826f6c4944755cb25eb2dd47ff24a4935_square.webp" onclick="changeImage(this.src, 'product15')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/08/22/4a/172425758824b2f506461fd50f2683421dc83e316b_square.webp" onclick="changeImage(this.src, 'product15')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/08/22/4a/1724257588c924dfadd7877f0f019cb8511c88875a_square.webp" onclick="changeImage(this.src, 'product15')">
-            <img src="https://img.ltwebstatic.com/images3_spmp/2024/09/04/a5/172546440178fc111c20c54911f393c4493472b141_square.webp" onclick="changeImage(this.src, 'product15')">
-        </div>
-    </div>
-
-
-
-
 
     <script>
-        // Función para abrir el modal
-        function openModal(productId) {
-            const modal = document.getElementById(productId + 'Modal');
+        const products = [
+            {
+                id: 'product1',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2024/09/04/7d/17254572424b636c2f1b4e370ed5401fa37ef82b84.webp',
+                title: 'Lubricante Frutal de Fresa - Suavidad y Placer',
+                description: 'Este lubricante a base de agua con sabor a fresa proporciona una experiencia suave y sedosa, perfecta para parejas y uso con juguetes. Con 200 ml (6.8 oz) de placer, es ideal para añadir un toque frutal a tus momentos íntimos.',
+                price: 'Lps. 400.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/04/7d/17254572424b636c2f1b4e370ed5401fa37ef82b84.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/04/7d/1725457242016bdf58c91be1fface7267ec7d54af1.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/04/7d/1725457242e5cd7782e4ce473af9be70bab04c5606.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/04/d9/1725457243c0b7dffd53eac8eb208edf093dd0549a.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/04/bb/1725457320b71ee9d3c0c5d1678913d9aad24c216b.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/04/7d/17254572422d227944d563cd0b60cc3dd9c78f499c.webp'
+                ]
+            },
+            {
+                id: 'product2',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2023/06/27/1687880142e2950754f103e0d2af5204533d7f157f_thumbnail_750x999.webp',
+                title: 'Enema - Ducha Íntima para Limpieza Profunda',
+                description: 'Diseñado para una limpieza anal efectiva y cómoda. Ideal para quienes buscan una experiencia fresca y segura antes de la intimidad. Su capacidad de 160ml garantiza una limpieza profunda y eficiente en cada uso.',
+                price: 'Lps. 230.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/27/1687880142e2950754f103e0d2af5204533d7f157f_thumbnail_750x999.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/27/16878801448ea96896135dd22c4ce226082c710d5d_thumbnail_750x999.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/27/1687880145df30b0b07588bd29ddeba8dd825cff01_thumbnail_750x999.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/27/1687880145cd3e425792bbe68ffe4287d7714688f8_thumbnail_750x999.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/27/1687880146484cdfb2c27ff1a98d2971fe0bb4f511_thumbnail_750x999.webp'
+                ]
+            },
+            {
+                id: 'product3',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2024/09/27/b4/1727406835aedfe040373e8b24ccc15acb321cbb8a_square.webp',
+                title: 'Estimulador Anal Inalámbrico con Control Remoto',
+                description: 'Con 10 velocidades de vibración y diseño silencioso, es ideal para la estimulación anal. Compacto y portátil, es un compañero discreto para explorar y disfrutar de momentos íntimos llenos de emoción.',
+                price: 'Lps. 380.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/27/b4/1727406835aedfe040373e8b24ccc15acb321cbb8a_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/27/e1/17274068854112022064bb7ad30f64ba06965618ba_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/10/07/6a/1728282772a3ef711e0e1e8e0beada77aa35f9914a_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/27/69/1727406909086e62524032f566fe6637e1c06125b6_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/27/e3/1727406919083f3b26838496bc2bb1be37aa3d5833_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/27/ec/172740693033d3a777a8cc236aae55db0c66661d0f_square.webp'
+                ]
+            },
+            {
+                id: 'product4',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2023/11/17/7a/1700189317ec49a02f7c6d02634c2ab6e54cd48431.webp',
+                title: 'Masturbador Masculino Portátil',
+                description: 'Su diseño portátil y ligero (4.92 pulgadas) lo convierte en el compañero perfecto. Fabricado con materiales seguros, asegura una experiencia cómoda y satisfactoria.',
+                price: 'Lps. 700.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2023/11/17/7a/1700189317ec49a02f7c6d02634c2ab6e54cd48431.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/11/17/7a/17001893176033f2236f7bbdd63bb05fd2206c3281.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/11/17/7a/1700189317db7ece359d415ea793ba4bc245c1d47a.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/11/17/8c/1700189328d297cc91e9f89433c74a549fb503ed5d.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/11/17/7a/1700189317a5a3e576af9c8297abbc894863702f17.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/11/17/7a/1700189317678dae4888f2a539b576576ab0177f7e.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/11/17/8c/17001893285dfb366fdbb1fba90a731accd061ee02.webp'
+                ]
+            },
+            {
+                id: 'product5',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2023/06/13/168662838368c912f7560d52128a892eb088dcbd1f.webp',
+                title: 'Huevo Vibrador Inalámbrico',
+                description: 'Este vibrador saltarín inalámbrico ofrece una experiencia emocionante con control remoto, su diseño compacto y versátil lo convierte en un juguete ideal para explorar nuevas sensaciones juntos.',
+                price: 'Lps. 410.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/13/168662838368c912f7560d52128a892eb088dcbd1f.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/13/16866283714dc205a092d38004e458110962ab3fb0.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/13/1686628360b3ec05efa27ea5b717fbadfbf23418f2.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/13/1686628359c5aca1b374d3a30c57e6f6a48bdf76d1.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/13/1686628359c4ece4f99cfcdd179985b671ae999064.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/13/1686628359c4122eec7879ef14c8483ecfb9332636.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/13/16866283601b47bb6320feeedf93b0693d67e197ff.webp'
+                ]
+            },
+            {
+                id: 'product6',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2024/09/13/b2/17261983465ce15cc7dc82c6598ba4c99241fc149f.webp',
+                title: 'Magic Wand - Estimulador Potente y Compacto',
+                description: 'Su diseño compacto lo hace conveniente para llevar, convirtiéndolo en un masajeador ideal para el punto G y un excelente compañero en tus momentos de placer.',
+                price: 'Lps. 410.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/13/b2/17261983465ce15cc7dc82c6598ba4c99241fc149f.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/13/46/1726198266707c10a1fb3b728bc1b13bd77889ca42.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/13/46/1726198266fa358eb6037a697504b621e2e0fc8244.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/13/50/1726198267b0a2dbdbedb085cb8aea8ae674f7bd8a.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/13/46/172619826602b13a3460b01d5e7bc2fc6332e1724a.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/13/8a/17261982863cbd29926e9a138f21738cc91cbe71ec.webp'
+                ]
+            },
+            {
+                id: 'product7',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2024/07/31/77/172238907867e69d485a573c5746557ea100342930.webp',
+                title: 'Estimulador Vaginal de 10 Velocidades',
+                description: 'Este vibrador mariposa de diseño floral ofrece 10 velocidades para una estimulación personalizada del clítoris y un masaje vaginal placentero. Hecho de silicona suave.',
+                price: 'Lps. 700.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2024/07/31/77/172238907867e69d485a573c5746557ea100342930.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/07/31/77/1722389078bcdc22172cf94f764f2532a1388ca308.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/07/31/77/1722389078ce65e1fbeaeafb2fa0b3c73de2870c8c.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/07/31/a6/1722389079bdd9c3f65f4749a29edfd220f9043caf.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/08/22/be/1724289035af2c3b2deed8243c8f60c9c906291bbb.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/07/31/77/1722389078b8b626065fd5ad3532d5878a8f729ac3.webp'
+                ]
+            },
+            {
+                id: 'product8',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2024/11/04/11/173071253592e92528d29e7b15e00812dc8e75f775.webp',
+                title: 'Dildo Realista de 8.7"',
+                description: 'Con un impresionante tamaño de 8.7 pulgadas y un grosor que garantiza una sensación realista, este dildo de silicona suave, flexible y su base con ventosa permite fijarlo en cualquier superficie, liberando tus manos para un placer sin límites.',
+                price: 'Lps. 900.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2024/11/04/11/173071253592e92528d29e7b15e00812dc8e75f775.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/01/25/4c/170615243722e9091b6871f6d644f827d636cd18e4.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/10/29/ce/1730167002f9c6b97e3355cba953e2918caf514492.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/10/29/ce/17301670025b8d4aa2fa5ac21f29c45f13c7f62b98.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/01/25/4c/17061524373e9a66c310767a0795937a3623d79aee.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/01/25/4c/170615243745a509289e3805cb847d0be3167ab43e.webp'
+                ]
+            },
+            {
+                id: 'product9',
+                image: 'https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/1f64783a-de40-4c33-86a7-1ab6d2898378.jpg',
+                title: 'Varita Vibradora Potente',
+                description: 'Diseñada para estimular el clítoris, el punto G y la zona vaginal. Con 10 modos de vibración, te ofrece desde suaves caricias hasta intensas pulsaciones para satisfacer todas tus fantasías.',
+                price: 'Lps. 990.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/1f64783a-de40-4c33-86a7-1ab6d2898378.jpg',
+                    'https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/e5ecc26c-d7d1-46d8-913d-689d8ffbe555.jpg',
+                    'https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/a90d8ef3-da92-4dc3-88e8-c022a1db4225.jpg',
+                    'https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/49b8a38d-713c-4f9d-99d8-3f9cd3573328.jpg',
+                    'https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/ef1dd05e-3afb-47b6-8e04-118c995cc8df.jpg',
+                    'https://img4.dhresource.com/webp/m/0x0/f3/albu/km/g/21/d448044c-f89b-4807-b57f-1be042f5f3c0.jpg'
+                ]
+            },
+            {
+                id: 'product10',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2024/10/15/64/1728957434b31591409de0da34df4d0904618b6240.webp',
+                title: 'Vibrador con Embestida Realista y Ultra Placer',
+                description: 'Diseñado para imitar un movimiento real de penetración con potentes vibraciones que estimulan el clítoris y el punto G al máximo. Su tecnología de oscilación y empuje profundo ofrece sensaciones más intensas y placenteras.',
+                price: 'Lps. 990.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2024/10/15/64/1728957434b31591409de0da34df4d0904618b6240.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/10/09/13/1728466914c46b17eef4de853305263f1c84e35d09.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/10/09/09/172846657012d7a06e6196656edf3be47b9c28915e.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/10/09/d9/1728466923c730210b0df6dd513cff4874b46e8328.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/10/09/71/1728466939c28b58d37a17063ec8de036b3d4bf932.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/10/09/16/1728466972dc114ba415a23b8ccb691bb042fa194b.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/10/09/00/17284669938d3bf4987710fafcd16ecef9f6d91b4d.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/10/09/17/17284669311d49deea9e09312fecc12225a32c2d79.gif'
+                ]
+            },
+            {
+                id: 'product11',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2024/07/16/2b/172111981652c99b4cfa2db1ceb3be943b2527ede4.webp',
+                title: 'Estimulador de Clitoris y Dilatador Anal',
+                description: 'Este vibrador realista ofrece una experiencia doble con su modo vibratorio para estimular el clítoris y el punto G, además de funcionar como dilatador anal. Con 9 modos de vibración y un diseño portátil.',
+                price: 'Lps. 690.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2024/07/16/2b/172111981652c99b4cfa2db1ceb3be943b2527ede4.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/06/25/9a/1719303330c9c16c6e5cd46a625e7212ebc0e5fae6.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/06/25/cb/1719303422604e078a64779adddd3e478c554548d6.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/06/25/b8/171930333117736632cae7e5acabce2f6a39b44fb0.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/06/25/b8/1719303331e0fdf0ad715f30ddf74d974894c27b2e.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/06/25/b8/1719303331314e5c9fc8f6c5afa69e5f12e9c9c835.gif',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/06/25/f9/17193034231cc3c31274adf90e2d95152bd83102a6.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/06/25/cb/1719303422fdc6cec6ae406f8402247b1dca0d6bd5.webp'
+                ]
+            },
+            {
+                id: 'product12',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2024/03/07/91/17097866539ac0cb3a2666fa9fe30ae032e9acdcc8.webp',
+                title: 'Secret Bliss – Mini Vibrador Discreto y Potente',
+                description: 'Pequeño, elegante y extremadamente placentero. Es un mini vibrador con diseño de lápiz labial rojo, perfecto para la discreción y el placer en cualquier momento.',
+                price: 'Lps. 300.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2024/03/07/91/17097866539ac0cb3a2666fa9fe30ae032e9acdcc8.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/16/16868915191552831613193cae35f4459ed3ffd919.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/16/16868915199b8cd0cf194bc2ec420cd6c46431f0a4.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/16/16868915196657b7bae28cdfa5ae7709c03c58e837.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/06/16/16868915191ed953ecdf350a7f58d9a4d1edea3b60.webp'
+                ]
+            },
+            {
+                id: 'product13',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2024/11/04/b6/173070517283d7e82d2dfc95f441b62cb9ab249efb.webp',
+                title: 'Mini Bala VibraX – Placer Preciso y Discreto',
+                description: 'Pequeña pero poderosa, la Mini Bala VibraX es el estimulador perfecto para intensos momentos de placer. Su diseño compacto y vibración potente permiten una estimulación precisa del clítoris y la zona vaginal.',
+                price: 'Lps. 300.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2024/11/04/b6/173070517283d7e82d2dfc95f441b62cb9ab249efb.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/09/05/f5/1693894738a1a578429bd1e5576b825d7ec99c38a8.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/09/05/f5/1693894738ef545f4e711f5ae298fdbaed7a6e46c5.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/08/16/80/17237997437f04afdf788a5d9a9c0ebd18663ca9b8.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/09/05/f5/169389473823d23345a42d5340ae47e0f08ddcf080.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/08/16/86/17237991426b4348a274bc22cac9c42c843b9257b4.webp'
+                ]
+            },
+            {
+                id: 'product14',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2023/07/24/16901688526a2bb0a1d206b71f70282d6615018835_square.webp',
+                title: 'Dark Desire – Kit BDSM de 11 Piezas para Ataduras y Placer Extremo',
+                description: 'Lleva tus juegos de dominación y sumisión al siguiente nivel, un kit BDSM completo de 11 piezas diseñado para explorar tus fantasías más intensas.',
+                price: 'Lps. 700.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2023/07/24/16901688526a2bb0a1d206b71f70282d6615018835_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/07/24/169016885254ac7b1136ee1d5d168282cd97db7f11_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/07/24/16901688525737fd24fb319bf3975079998864b27c_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/07/24/1690168852100d79c8d3f15e92c1960274e0aa98cd_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/07/24/16901688533ec9b2891f294734fb810fcac8f2a9d2_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2023/07/24/1690168852f7eb1e5116046633631359b8d0d10e93_square.webp'
+                ]
+            },
+            {
+                id: 'product15',
+                image: 'https://img.ltwebstatic.com/images3_spmp/2024/09/16/0b/1726434367fba10fab4a53abb1bc68fad2bb0c7138_square.webp',
+                title: 'Bolsa de Almacenamiento',
+                description: 'Guarda y protege tus juguetes íntimos con Discreet Safe, diseñada para mantener la discreción y la higiene. Ideal para dildos, vibradores, esposas y otros accesorios, evitando miradas indiscretas y protegiéndolos del polvo y la suciedad.',
+                price: 'Lps. 320.00',
+                stock: 1,
+                thumbnails: [
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/16/0b/1726434367fba10fab4a53abb1bc68fad2bb0c7138_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/07/13/78/1720869524c18f0c9a6c1e8d77081a0df28a092528_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/08/22/4a/172425758826f6c4944755cb25eb2dd47ff24a4935_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/08/22/4a/172425758824b2f506461fd50f2683421dc83e316b_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/08/22/4a/1724257588c924dfadd7877f0f019cb8511c88875a_square.webp',
+                    'https://img.ltwebstatic.com/images3_spmp/2024/09/04/a5/172546440178fc111c20c54911f393c4493472b141_square.webp'
+                ]
+            }
+        ];
+
+        const productContainer = document.getElementById('product-container');
+        const modal = document.getElementById('modal-template');
+        const modalImage = document.getElementById('modal-image');
+        const modalThumbnails = document.getElementById('modal-thumbnails');
+        const searchInput = document.getElementById('search-input');
+
+        function renderProducts(filteredProducts) {
+            productContainer.innerHTML = '';
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.onclick = () => openModal(product);
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.title}">
+                    <div class="details">
+                        <h3>${product.title}</h3>
+                        <p>${product.description}</p>
+                        <p class="price">${product.price}</p>
+                    </div>
+                    <span class="stock-label">Stock: ${product.stock}</span>
+                `;
+                productContainer.appendChild(productCard);
+            });
+        }
+
+        function filterProducts() {
+            const query = searchInput.value.toLowerCase();
+            const filtered = products.filter(product => {
+                return product.title.toLowerCase().includes(query) || product.description.toLowerCase().includes(query);
+            });
+            renderProducts(filtered);
+        }
+
+        function openModal(product) {
             modal.style.display = 'block';
-            // Resetear la imagen principal al abrir el modal
-            const firstImage = modal.querySelector('.thumbnails img').src;
-            modal.querySelector('.modal-content').src = firstImage;
-            // Marcar la primera imagen como activa
-            modal.querySelectorAll('.thumbnails img').forEach(img => img.classList.remove('active'));
-            modal.querySelector('.thumbnails img').classList.add('active');
+            modalImage.src = product.image;
+            modalThumbnails.innerHTML = '';
+            product.thumbnails.forEach(thumb => {
+                const img = document.createElement('img');
+                img.src = thumb;
+                img.alt = product.title;
+                img.onclick = () => changeImage(img.src);
+                modalThumbnails.appendChild(img);
+            });
+            updateActiveThumbnail(product.image);
         }
 
-        // Función para cerrar el modal
-        function closeModal(productId) {
-            document.getElementById(productId + 'Modal').style.display = 'none';
+        function changeImage(imageSrc) {
+            modalImage.src = imageSrc;
+            updateActiveThumbnail(imageSrc);
         }
 
-// Función para cambiar la imagen en el modal para 15 productos
-function changeImage(src, productId) {
-    const productNumber = productId.replace('product', ''); // Extraemos el número del producto (1, 2, 3, ..., 15)
-    const modalContent = document.getElementById('img' + productNumber.padStart(2, '0')); // Generamos el id img01, img02, ..., img15
-    modalContent.src = src;
+        function updateActiveThumbnail(imageSrc) {
+            const thumbnails = modalThumbnails.querySelectorAll('img');
+            thumbnails.forEach(thumb => {
+                thumb.classList.remove('active');
+                if (thumb.src === imageSrc) {
+                    thumb.classList.add('active');
+                }
+            });
+        }
 
-    // Marcar la imagen seleccionada como activa
-    document.querySelectorAll('#' + productId + 'Modal .thumbnails img').forEach(img => img.classList.remove('active'));
-    event.target.classList.add('active');
-}
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts(products);
+        });
 
     </script>
-
 </body>
 </html>
